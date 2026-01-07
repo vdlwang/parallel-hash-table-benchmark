@@ -15,6 +15,14 @@ baseline:
 		done; \
 	done
 
+baseline-N2: 
+	for iteration in 1 2 3 ; do \
+		for number in 1 ; do \
+			./baseline.out -t 4 -r 42 >> results/baseline-N.txt & \
+		done; \
+		wait; \
+	done
+
 baseline-N: 
 	for iteration in 1 2 3 ; do \
 		for number in 1 2 ; do \
@@ -78,35 +86,58 @@ sharded-4N:
 		wait; \
 	done
 
-container-N:
+container-baseline-N:
 	for iteration in 1 2 3 ; do \
 		for i in 1 2; do \
-		  docker run --rm --cpus="4" phb:baseline -t 4 -r 42 >> results/container-N.txt & \
+		  docker run --rm --cpus="4" phb:baseline -t 4 -r 42 >> results/container-baseline-N.txt & \
 		done; \
 		wait; \
 	done
 
-container-2N:
+container-baseline-2N:
 	for iteration in 1 2 3 ; do \
 		for i in 1 2 3 4; do \
-		  docker run --rm --cpus="4" phb:baseline -t 4 -r 42 >> results/container-2N.txt & \
+		  docker run --rm --cpus="4" phb:baseline -t 4 -r 42 >> results/container-baseline-2N.txt & \
 		done; \
 		wait; \
 	done
 
-container-4N:
+container-baseline-4N:
 	for iteration in 1 2 3 ; do \
 		for i in 1 2 3 4 5 6 7 8; do \
-		  docker run --rm --cpus="4" phb:baseline -t 4 -r 42 >> results/container-4N.txt & \
+		  docker run --rm --cpus="4" phb:baseline -t 4 -r 42 >> results/container-baseline-4N.txt & \
 		done; \
 		wait; \
 	done
 
+container-sharded-N:
+	for iteration in 1 2 3 ; do \
+		for i in 1 2; do \
+		  docker run --rm --cpus="4" phb:sharded -t 4 -r 42 >> results/container-sharded-N.txt & \
+		done; \
+		wait; \
+	done
 
-N: baseline-N sharded-N container-N
+container-sharded-2N:
+	for iteration in 1 2 3 ; do \
+		for i in 1 2 3 4; do \
+		  docker run --rm --cpus="4" phb:sharded -t 4 -r 42 >> results/container-sharded-2N.txt & \
+		done; \
+		wait; \
+	done
 
-2N: baseline-2N sharded-2N container-2N
+container-sharded-4N:
+	for iteration in 1 2 3 ; do \
+		for i in 1 2 3 4 5 6 7 8; do \
+		  docker run --rm --cpus="4" phb:sharded -t 4 -r 42 >> results/container-sharded-4N.txt & \
+		done; \
+		wait; \
+	done
 
-4N: baseline-4N sharded-4N container-4N
+N: baseline-N container-baseline-N sharded-N container-sharded-N
+
+2N: baseline-2N container-baseline-2N sharded-2N container-sharded-2N
+
+4N: baseline-4N container-baseline-4N sharded-4N container-sharded-4N
 
 all: baseline sharded N 2N 4N 

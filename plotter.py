@@ -39,7 +39,7 @@ def plot_oversubscription(env_files, params):
         err = []
         exps = []
         for exp, apps in params.items():
-            if (apps != 8 or label != "VM"):
+            if (apps != 8 or not label.endswith("VM")):
                 data = parse_result_file(path + "-" + exp + ".txt")
                 avg, std = compute_avg_std(data)
 
@@ -102,8 +102,10 @@ if __name__ == "__main__":
     oversubscription_files = {
         "Baseline": "results/baseline",
         "Sharded": "results/sharded",
-        "Container": "results/container",
-        # "VM": "results/vm",
+        "Baseline Container": "results/container-baseline",
+        "Sharded Container": "results/container-sharded",
+        "Baseline VM": "results/vm-baseline",
+        "Sharded VM": "results/vm-sharded",
     }
 
     oversubscription_params = {
