@@ -15,11 +15,11 @@ RUN apt-get update && \
 WORKDIR /bench
 
 # Copy source code
-COPY sharded.c .
+COPY baseline.c .
 
 # Compile the benchmark
-RUN gcc -O2 -pthread sharded.c -o sharded.out
+RUN gcc -O2 -pthread baseline.c -o baseline.out
 
 # Default command (can be overridden)
-ENTRYPOINT ["./sharded.out"]
+ENTRYPOINT ["./baseline.out"]
 

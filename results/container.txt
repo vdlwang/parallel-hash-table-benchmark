@@ -1,6 +1,0 @@
-threads=4 table=1048576 duration=10.01 ops=23772544 ops_per_sec=2375888.78
-threads=4 table=1048576 duration=10.00 ops=22459212 ops_per_sec=2245767.03
-threads=4 table=1048576 duration=10.00 ops=24775904 ops_per_sec=2476812.13
-threads=4 table=1048576 duration=10.00 ops=24085116 ops_per_sec=2408095.89
-threads=4 table=1048576 duration=10.00 ops=20928908 ops_per_sec=2092506.62
-threads=4 table=1048576 duration=10.00 ops=24251604 ops_per_sec=2425134.42

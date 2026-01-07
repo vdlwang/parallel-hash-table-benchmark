@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define WORK_OUT 50
+#define WORK_OUT 100
 #define WORK_IN 4
 #define NUM_SHARDS 8
 
@@ -50,6 +50,15 @@ static inline int shard_for_key(int key) {
     return key % NUM_SHARDS;
 }
 
+static inline void do_work(int iters) {
+    volatile uint64_t x = 0xdeadbeef;
+    for (int i = 0; i < iters; i++) {
+        x ^= x << 13;
+        x ^= x >> 7;
+        x ^= x << 17;
+    }
+}
+
 /* =========================
 * Worker Thread
 * ========================= */
@@ -58,17 +67,13 @@ static void *worker_thread(void *arg) {
   thread_state_t *ts = (thread_state_t *)arg;
   while (!stop_flag) {
 
-    for (int i = 0; i < WORK_OUT; i++)
-      asm volatile("pause");
-    
+    do_work(WORK_OUT);
     int key = rand_r(&ts->rng_state) % config.table_size;
     int shard = shard_for_key(key);
 
     pthread_mutex_lock(&table.locks[shard]);
 
-    for (int i = 0; i < WORK_IN; i++) {
-        asm volatile("pause");
-    }
+    do_work(WORK_IN);
     table.buckets[key].value++;
     
     pthread_mutex_unlock(&table.locks[shard]);
